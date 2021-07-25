@@ -12,6 +12,7 @@ import shimuli.cedric.awesomeplaces.adapters.HappyPlacesAdapter
 import shimuli.cedric.awesomeplaces.database.DatabaseHandle
 import shimuli.cedric.awesomeplaces.databinding.ActivityMainBinding
 import shimuli.cedric.awesomeplaces.models.HappyPlaceModel
+import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity() {
      private lateinit var binding:ActivityMainBinding
@@ -32,6 +33,14 @@ class MainActivity : AppCompatActivity() {
         val placesAdapter = HappyPlacesAdapter(this, happyPlacesList)
         binding.rvHappyPlaces.setHasFixedSize(true)
         binding.rvHappyPlaces.adapter = placesAdapter
+
+        placesAdapter.setOnClickListener(object : HappyPlacesAdapter.IonClickListener{
+            override fun onClick(position:Int, model: HappyPlaceModel){
+                val intent = Intent(this@MainActivity, HappyPlaceDetails::class.java)
+                intent.putExtra(EXTRA_PLACE_DETAILS, model)
+                startActivity(intent)
+            }
+        })
     }
 
     // get all place
@@ -45,8 +54,8 @@ class MainActivity : AppCompatActivity() {
             setHappyPlaces(getHappyPlaceList)
 
             for(i in getHappyPlaceList){
-                Log.e("Title", i.title)
-                Log.e("Description", i.description)
+                i.title?.let { Log.e("Title", it) }
+                i.description?.let { Log.e("Description", it) }
             }
         }
         else{
@@ -69,5 +78,6 @@ class MainActivity : AppCompatActivity() {
     }
     companion object{
         var ADD_PLACE_ACTIVITY_REQUEST_CODE = 1
+        var EXTRA_PLACE_DETAILS ="extra_places_details"
     }
 }
