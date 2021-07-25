@@ -8,5 +8,9 @@
     <string name="edit_text_hint_location">Location</string>
     <string name="text_add_image">ADD IMAGE</string>
     <string name="btn_text_save">SAVE</string>
+    <string name="no_places_found">No Happy Places Found yet, Add one</string>
+
+    <string name="image_content_description">image</string>
+
 
 </resources>
