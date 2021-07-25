@@ -1,4 +1,4 @@
-package shimuli.cedric.awesomeplaces
+package shimuli.cedric.awesomeplaces.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
