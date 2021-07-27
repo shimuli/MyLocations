@@ -1,12 +1,16 @@
 package shimuli.cedric.awesomeplaces.adapters
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import shimuli.cedric.awesomeplaces.R
+import shimuli.cedric.awesomeplaces.activities.AddHappyPlaceActivity
+import shimuli.cedric.awesomeplaces.activities.MainActivity
 import shimuli.cedric.awesomeplaces.databinding.HappyPlacesListBinding
 import shimuli.cedric.awesomeplaces.models.HappyPlaceModel
 
@@ -34,6 +38,13 @@ class HappyPlacesAdapter(
                 }
             }
 
+    }
+    // swipe to edit
+    fun notifyEditItem(activity:Activity, position: Int, requestCode:Int){
+        val intent = Intent(context, AddHappyPlaceActivity::class.java)
+        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, list[position])
+        activity.startActivityForResult(intent, requestCode)
+        notifyItemChanged(position)
     }
 
     interface IonClickListener{

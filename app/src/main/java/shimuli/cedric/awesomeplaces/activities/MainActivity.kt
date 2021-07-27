@@ -7,11 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import shimuli.cedric.awesomeplaces.adapters.HappyPlacesAdapter
 import shimuli.cedric.awesomeplaces.database.DatabaseHandle
 import shimuli.cedric.awesomeplaces.databinding.ActivityMainBinding
 import shimuli.cedric.awesomeplaces.models.HappyPlaceModel
+import shimuli.cedric.awesomeplaces.utils.SwipeToEditCallback
 import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +44,16 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+        // swipe feature
+        val editSwipeHandler = object: SwipeToEditCallback(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding.rvHappyPlaces.adapter as HappyPlacesAdapter
+                adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition, ADD_PLACE_ACTIVITY_REQUEST_CODE)
+            }
+        }
+
+        val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
+        editItemTouchHelper.attachToRecyclerView(binding.rvHappyPlaces)
     }
 
     // get all place
@@ -73,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             }
             else{
                 Log.e("Activity", "Canceled or back pressed")
+
             }
         }
     }

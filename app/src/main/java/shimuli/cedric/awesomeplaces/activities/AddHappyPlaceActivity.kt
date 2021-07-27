@@ -44,7 +44,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private  var mLatitude: Double = 0.0
     private  var mLongitude: Double = 0.0
 
-    
+    private  var mHappyPlaceDetails: HappyPlaceModel? =null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddHappyPlaceBinding.inflate(layoutInflater)
@@ -57,6 +58,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             onBackPressed()
         }
 
+        // for swap
+        if (intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)){
+            mHappyPlaceDetails = intent.getParcelableExtra(MainActivity.EXTRA_PLACE_DETAILS) as HappyPlaceModel?
+        }
+
         // get date picker
         datesetListener = DatePickerDialog.OnDateSetListener {
                 _, year, month, dayOfMonth ->
@@ -66,6 +72,21 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             updateDateInView()
         }
         updateDateInView()
+
+        if(mHappyPlaceDetails != null){
+            supportActionBar?.title = "Edit Happy Place"
+
+            binding.etTitle.setText(mHappyPlaceDetails!!.title)
+            binding.etDescription.setText(mHappyPlaceDetails!!.description)
+            binding.etLocation.setText(mHappyPlaceDetails!!.location)
+            mLatitude = mHappyPlaceDetails!!.latitude
+            mLongitude = mHappyPlaceDetails!!.longitude
+
+            savedImage = Uri.parse(mHappyPlaceDetails!!.image)
+            binding.ivPlaceImage.setImageURI(savedImage)
+            binding.btnSave.text = "Update"
+        }
+
         binding.etDate.setOnClickListener(this)
         binding.tvAddImage.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
@@ -116,7 +137,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                        Toast.makeText(this, "Enter a Location", Toast.LENGTH_LONG).show()
                    }else ->{
                        val happyPlaceModel = HappyPlaceModel(
-                           0,
+                           if(mHappyPlaceDetails == null) 0 else mHappyPlaceDetails!!.id,
                            binding.etTitle.text.toString(),
                            savedImage.toString(),
                            binding.etDescription.text.toString(),
@@ -126,16 +147,30 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                            mLongitude
                        )
                    val dbHandler = DatabaseHandle(this)
-                   val addHappyPlace = dbHandler.saveHappyPlace(happyPlaceModel)
 
-                   if(addHappyPlace >0){
-                       setResult(Activity.RESULT_OK)
-                       Toast.makeText(this, "The awesome place was saved successfully", Toast.LENGTH_LONG).show()
-                       finish()
+                   if (mHappyPlaceDetails == null){
+                       val addHappyPlace = dbHandler.saveHappyPlace(happyPlaceModel)
+                       if(addHappyPlace >0){
+                           setResult(Activity.RESULT_OK)
+                           Toast.makeText(this, "The awesome place was saved successfully", Toast.LENGTH_LONG).show()
+                           finish()
+                   }
+                       else{
+                           Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show()
+                       }
                    }
                    else{
-                       Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show()
+                       val updateHappyPlace = dbHandler.updateHappyPlace(happyPlaceModel)
+                       if(updateHappyPlace >0){
+                           setResult(Activity.RESULT_OK)
+                           Toast.makeText(this, "The awesome place was saved successfully", Toast.LENGTH_LONG).show()
+                           finish()
+                       }
+                       else{
+                           Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show()
+                       }
                    }
+
                    }
 
                }
