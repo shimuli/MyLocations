@@ -1,5 +1,6 @@
 package shimuli.cedric.awesomeplaces.activities
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -32,6 +33,12 @@ class HappyPlaceDetails : AppCompatActivity() {
             binding.ivPlaceImage.setImageURI(Uri.parse(happyPlaceDetailsModel.image))
             binding.tvDescription.text = happyPlaceDetailsModel.description
             binding.tvLocation.text = happyPlaceDetailsModel.location
+
+            binding.btnViewOnMap.setOnClickListener{
+                val intent = Intent(this, MapActivity::class.java)
+                intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, happyPlaceDetailsModel)
+                startActivity(intent)
+            }
         }
     }
 }

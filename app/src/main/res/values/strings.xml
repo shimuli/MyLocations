@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Awesome Places</string>
     <string name="add_icon">add icon</string>
-
     <string name="edit_text_hint_title">Title</string>
     <string name="edit_text_hint_description">Description</string>
     <string name="edit_text_hint_date">Date</string>
@@ -11,6 +10,13 @@
     <string name="no_places_found">No Happy Places Found yet, Add one</string>
 
     <string name="image_content_description">image</string>
+    <string name="btn_text_view_on_map">VIEW ON MAP</string>
+
+
+    <!--TODO (Step 3: The string values are added here for Select current location.)-->
+    <string name="add_place_select_current_location_text">SELECT CURRENT LOCATION</string>
+
+
 
 
 </resources>
